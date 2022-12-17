@@ -18,7 +18,7 @@ print("device:", device)
 # insert the code:
 
 if(mcuda):
-  net = torch.nn.DataParallel(net)
+  net = torch.nn.DataParallel(net) #如果是多个gpu， 然后在to_device
   #net=torch.nn.DataParallel(net, device_ids=[0, 1, 2])
 net.to(device)
 
@@ -28,7 +28,11 @@ data.to(device)
     
 
 #保存模型
-#直接保存模型（参数+图）：
+
+#官方建议的模型保存方式，只保存参数：
+torch.save(model.module.state_dict(), "model.pkl")
+
+#我们建议直接保存模型（参数+图）：
 torch.save(net, "model.pkl")
 
 #如果环境没有变化， 读取的时候直接读取：
